@@ -10,6 +10,7 @@ public class DataManager_Activity  implements Queueable {
     
     // List of Telephony to import, initiated in the constructor
     private List<Task> DTC_Telephony;
+    string test='';
     
     // The absolute days difference initiated at construction
     private Integer absDaysDiff;
