@@ -136,7 +136,7 @@ public class DataManager_Activity  implements Queueable {
             if (userName == 'Admin User') {
                 userName = UserInfo.getName();
             }
-            
+           /* 
             Task temp = new Task();
             temp.WhatId = objectIdbyName.get('Case').get(inputValues[0]);
             temp.OwnerId = objectIdbyName.get('User').get(userName);
@@ -154,6 +154,7 @@ public class DataManager_Activity  implements Queueable {
                 
             // Add the Task to the list
             Telephony.add(temp);
+            */
         }
         
         return Telephony;
