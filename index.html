@@ -283,6 +283,8 @@
                      'lightningout', 
                      function (cmp) {
                         console.log('LWC Componenet added in external page');
+                        $('link[rel=stylesheet][href*="app.css"]').remove();
+                        console.log('salesforce stylesheet removed');
                      }
                   );
                },
