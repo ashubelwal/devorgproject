@@ -15,55 +15,79 @@
 
 <script type='text/javascript' src='https://service.force.com/embeddedservice/5.0/esw.min.js'></script>
 <script type='text/javascript'>
-	var initESW = function(gslbBaseURL) {
-		embedded_svc.settings.displayHelpButton = true; //Or false
-		embedded_svc.settings.language = ''; //For example, enter 'en' or 'en-US'
+	let langLocale = 'us';
+			let defaultMinimizedText = "Parlez avec nous";
+	        let disabledMinimizedText = "Parlez avec nous";
+	        let loadingText = 'Chargement';
+	        let buttonId = '5739K000000ckt3';
+			let offlineSupportMinimizedText = 'Contactez-nous';
+			let fieldToValueMapping = [{
+	                    fieldName: 'Web_Country__c',
+	                    fieldValue: 'FR',
+	                    fieldType: 'select'
+	                }]
 
-		//embedded_svc.settings.defaultMinimizedText = '...'; //(Defaults to Chat with an Expert)
-		//embedded_svc.settings.disabledMinimizedText = '...'; //(Defaults to Agent Offline)
+	        var initESW = function (gslbBaseURL) {
+	            embedded_svc.settings.displayHelpButton = true; //Or false
+	            embedded_svc.settings.language = 'fr-FR'; //For example, enter 'en' or 'en-US'
+	            if (typeof window.chatboxInitCallback === 'function') { window.chatboxInitCallback(); }
+	            embedded_svc.settings.defaultMinimizedText = 'Discutez avec un expert'; //(Defaults to Chat with an Expert)
+	            embedded_svc.settings.disabledMinimizedText = disabledMinimizedText; //(Defaults to Agent Offline)
+	            embedded_svc.settings.loadingText = 'Veuillez patienter pendant que nous vous connectons'; //(Defaults to Loading)
+	            //embedded_svc.settings.storageDomain = 'yourdomain.com'; //(Sets the domain for your deployment so that visitors can navigate subdomains during a chat session)
+	            // Settings for Chat
+	            //embedded_svc.settings.directToButtonRouting = function(prechatFormData) {
+	            // Dynamically changes the button ID based on what the visitor enters in the pre-chat form.
+	            // Returns a valid button ID.
+	            //};
+	            //embedded_svc.settings.prepopulatedPrechatFields = {}; //Sets the auto-population of pre-chat form fields
+	            //embedded_svc.settings.fallbackRouting = []; //An array of button IDs, user IDs, or userId_buttonId
+	            embedded_svc.settings.offlineSupportMinimizedText = 'Contactez-nous'; //(Defaults to Contact Us)
+	            embedded_svc.settings.enabledFeatures = ['LiveAgent'];
+	            embedded_svc.settings.entryFeature = 'LiveAgent';
+				embedded_svc.init(
+					'https://swatch--uat.sandbox.my.salesforce.com',
+					'https://swatch--uat.sandbox.my.salesforce-sites.com/liveagentsetupflow',
+					gslbBaseURL,
+					'00D7Z0000004qpE',
+					'UK_Live_Chat',
+					{
+						baseLiveAgentContentURL: 'https://c.la2s-core1.sfdc-yzvdd4.salesforceliveagent.com/content',
+						deploymentId: '572090000000CTf',
+						buttonId: buttonId,
+						baseLiveAgentURL: 'https://d.la2s-core1.sfdc-yzvdd4.salesforceliveagent.com/chat',
+						eswLiveAgentDevName: 'EmbeddedServiceLiveAgent_Parent04I09000000ClB6EAK_175e088ee87',
+						isOfflineSupportEnabled: true
+					}
+				);									
+	        };
 
-		//embedded_svc.settings.loadingText = ''; //(Defaults to Loading)
-		//embedded_svc.settings.storageDomain = 'yourdomain.com'; //(Sets the domain for your deployment so that visitors can navigate subdomains during a chat session)
-
-		// Settings for Chat
-		//embedded_svc.settings.directToButtonRouting = function(prechatFormData) {
-			// Dynamically changes the button ID based on what the visitor enters in the pre-chat form.
-			// Returns a valid button ID.
-		//};
-		//embedded_svc.settings.prepopulatedPrechatFields = {}; //Sets the auto-population of pre-chat form fields
-		//embedded_svc.settings.fallbackRouting = []; //An array of button IDs, user IDs, or userId_buttonId
-		//embedded_svc.settings.offlineSupportMinimizedText = '...'; //(Defaults to Contact Us)
-
-		embedded_svc.settings.enabledFeatures = ['LiveAgent'];
-		embedded_svc.settings.entryFeature = 'LiveAgent';
-
-		embedded_svc.init(
-			'https://swatch.my.salesforce.com',
-			'https://swatch.my.salesforce-sites.com/liveagentsetupflow',
-			gslbBaseURL,
-			'00D09000000I5Sl',
-			'UK_Live_Chat',
-			{
-				baseLiveAgentContentURL: 'https://c.la1-core1.sfdc-yzvdd4.salesforceliveagent.com/content',
-				deploymentId: '572090000000CTf',
-				buttonId: '573090000000CYC',
-				baseLiveAgentURL: 'https://d.la1-core1.sfdc-yzvdd4.salesforceliveagent.com/chat',
-				eswLiveAgentDevName: 'EmbeddedServiceLiveAgent_Parent04I09000000ClB6EAK_175e088ee87',
-				isOfflineSupportEnabled: true
-			}
-		);
-	};
-
-	if (!window.embedded_svc) {
-		var s = document.createElement('script');
-		s.setAttribute('src', 'https://swatch.my.salesforce.com/embeddedservice/5.0/esw.min.js');
-		s.onload = function() {
-			initESW(null);
-		};
-		document.body.appendChild(s);
-	} else {
-		initESW('https://service.force.com');
-	}
+	        let requestPrototypeOpen = XMLHttpRequest.prototype.open;
+	        XMLHttpRequest.prototype.open = function () {
+	            this.addEventListener('load', b => {
+	                if (fieldToValueMapping) {
+	                    fieldToValueMapping.forEach(curFieldData => {
+	                        let fieldFound = document.querySelector(curFieldData.fieldType + '#' + curFieldData.fieldName);
+	                        if (fieldFound != null) {
+	                            fieldFound.closest('div').style.display = 'none';
+	                            fieldFound.value = curFieldData.fieldValue;
+	                            fieldFound.dispatchEvent(new Event('change', {'bubbles': true}));
+	                        }
+	                    });
+	                }
+	            });
+	            requestPrototypeOpen.apply(this, arguments);
+	        };
+	                        if (!window.embedded_svc) {
+	                                var s = document.createElement('script');
+	                                s.setAttribute('src', 'https://swatch--uat.sandbox.my.salesforce.com/embeddedservice/5.0/esw.min.js');
+	                                s.onload = function() {
+	                                                initESW(null);
+	                                };
+	                                document.body.appendChild(s);
+	                } else {
+	                                initESW('https://service.force.com');
+	                }
 </script>
 </body>
 </html>
