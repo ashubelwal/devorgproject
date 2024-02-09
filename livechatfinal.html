@@ -3,7 +3,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 </head>
 <body>
-	change 3
+	change 4
 <style type='text/css'>
 	.embeddedServiceHelpButton .helpButton .uiButton {
 		background-color: #001e45;
@@ -66,17 +66,33 @@ var initESW = function(gslbBaseURL) {
 		}
 	);
 };
-
-	if (!window.embedded_svc) {
-		var s = document.createElement('script');
-		s.setAttribute('src', 'https://swatch--uat.sandbox.my.salesforce.com/embeddedservice/5.0/esw.min.js');
-		s.onload = function() {
-			initESW(null);
-		};
-		document.body.appendChild(s);
-	} else {
-		initESW('https://service.force.com');
+	
+ let requestPrototypeOpen = XMLHttpRequest.prototype.open;
+XMLHttpRequest.prototype.open = function () {
+    this.addEventListener('load', b => {
+	if (fieldToValueMapping) {
+	    fieldToValueMapping.forEach(curFieldData => {
+		let fieldFound = document.querySelector(curFieldData.fieldType + '#' + curFieldData.fieldName);
+		if (fieldFound != null) {
+		    fieldFound.closest('div').style.display = 'none';
+		    fieldFound.value = curFieldData.fieldValue;
+		    fieldFound.dispatchEvent(new Event('change', {'bubbles': true}));
+		}
+	    });
 	}
+    });
+    requestPrototypeOpen.apply(this, arguments);
+};
+if (!window.embedded_svc) {
+	var s = document.createElement('script');
+	s.setAttribute('src', 'https://swatch--uat.sandbox.my.salesforce.com/embeddedservice/5.0/esw.min.js');
+	s.onload = function() {
+		initESW(null);
+	};
+	document.body.appendChild(s);
+} else {
+	initESW('https://service.force.com');
+}
 </script>
 </body>
 </html>
