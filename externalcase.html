@@ -5,6 +5,14 @@
             $Lightning.use(
                'c:ExternalCaseApp',
                function () {
+                    var languageCode = 'fr'; 
+                    // Use $A.getGlobalValueProviders() to get the $A global value provider
+                    var globalValueProviders = $A.getGlobalValueProviders();
+                    // Check if the $A global value provider is available
+                    if (globalValueProviders) {
+                        // Use setLocale to change the language dynamically
+                        globalValueProviders.get('$Locale').setLocale(languageCode);
+                    }
                   $Lightning.createComponent(
                      'c:externalCaseCreation', 
                      {}, 
@@ -16,6 +24,6 @@
                      }
                   );
                },
-               'https://swatch--qa.sandbox.my.salesforce-sites.com?lang=fr' // Site endpoint
+               'https://swatch--qa.sandbox.my.salesforce-sites.com' // Site endpoint
                );
             </script>
