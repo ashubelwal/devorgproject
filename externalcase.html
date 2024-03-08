@@ -1,6 +1,6 @@
 var globalValueProviders = $A.getGlobalValueProviders();
             <div id="lightningout"></div> 
-            <script src="https://swatch--qa.sandbox.my.salesforce-sites.com/lightning/lightning.out.js"></script>
+            <script src="https://swatch--qa.sandbox.my.site.com/FQA/lightning/lightning.out.js"></script>
             <script>
             $Lightning.use(
                'c:ExternalCaseApp',
@@ -8,7 +8,7 @@ var globalValueProviders = $A.getGlobalValueProviders();
                             var languageCode = 'fr'; 
                     
                    console.log('started',languageCode);
-                           var globalValueProviders = $A.getGlobalValueProviders();
+                 
                   $Lightning.createComponent(
                      'c:externalCaseCreation', 
                      {}, 
@@ -20,6 +20,6 @@ var globalValueProviders = $A.getGlobalValueProviders();
                      }
                   );
                },
-               'https://swatch--qa.sandbox.my.salesforce-sites.com' // Site endpoint
+               'https://swatch--qa.sandbox.my.site.com/FQA' // Site endpoint
                );
             </script>
