@@ -1,4 +1,4 @@
-$A.getGlobalValueProviders();
+var globalValueProviders = $A.getGlobalValueProviders();
             <div id="lightningout"></div> 
             <script src="https://swatch--qa.sandbox.my.salesforce-sites.com/lightning/lightning.out.js"></script>
             <script>
@@ -8,6 +8,7 @@ $A.getGlobalValueProviders();
                             var languageCode = 'fr'; 
                     
                    console.log('started',languageCode);
+                           var globalValueProviders = $A.getGlobalValueProviders();
                   $Lightning.createComponent(
                      'c:externalCaseCreation', 
                      {}, 
